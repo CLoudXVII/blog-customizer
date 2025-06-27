@@ -21,24 +21,24 @@ import {
 } from 'src/constants/articleProps';
 
 interface ArticleParamsFormProps {
-	fontFamily: (select: OptionType) => void;
-	fontSize: (select: OptionType) => void;
-	fontColor: (select: OptionType) => void;
-	backgroundColor: (select: OptionType) => void;
-	contentWidth: (select: OptionType) => void;
-	resetButton: () => void;
-	applyButton: (event: FormEvent) => void;
+	changeFontFamily: (select: OptionType) => void;
+	changeFontSize: (select: OptionType) => void;
+	changeFontColor: (select: OptionType) => void;
+	changeBackgroundColor: (select: OptionType) => void;
+	changeContainerWidth: (select: OptionType) => void;
+	onReset: () => void;
+	onSubmit: (event: FormEvent) => void;
 	sideBarState: ArticleStateType;
 }
 
 export const ArticleParamsForm = ({
-	fontFamily,
-	fontSize,
-	fontColor,
-	backgroundColor,
-	contentWidth,
-	resetButton,
-	applyButton,
+	changeFontFamily,
+	changeFontSize,
+	changeFontColor,
+	changeBackgroundColor,
+	changeContainerWidth,
+	onReset,
+	onSubmit,
 	sideBarState,
 }: ArticleParamsFormProps) => {
 	const ref = useRef<HTMLFormElement | null>(null);
@@ -53,40 +53,40 @@ export const ArticleParamsForm = ({
 			<ArrowButton isOpen={open} onClick={toggleForm} />
 			<aside
 				className={clsx(styles.container, { [styles.container_open]: open })}>
-				<form className={styles.form} ref={ref} onSubmit={applyButton}>
+				<form className={styles.form} ref={ref} onSubmit={onSubmit}>
 					<Text as={'h3'} size={31} weight={800} uppercase>
 						Задайте параметры
 					</Text>
 					<Select
 						selected={sideBarState.fontFamilyOption}
 						options={fontFamilyOptions}
-						onChange={fontFamily}
+						onChange={changeFontFamily}
 						title='Шрифт'
 					/>
 					<RadioGroup
 						name='fontSize'
 						options={fontSizeOptions}
 						selected={sideBarState.fontSizeOption}
-						onChange={fontSize}
+						onChange={changeFontSize}
 						title='Размер шрифта'
 					/>
 					<Select
 						selected={sideBarState.fontColor}
 						options={fontColors}
-						onChange={fontColor}
+						onChange={changeFontColor}
 						title='Цвет шрифта'
 					/>
 					<Separator />
 					<Select
 						selected={sideBarState.backgroundColor}
 						options={backgroundColors}
-						onChange={backgroundColor}
+						onChange={changeBackgroundColor}
 						title='Цвет фона'
 					/>
 					<Select
 						selected={sideBarState.contentWidth}
 						options={contentWidthArr}
-						onChange={contentWidth}
+						onChange={changeContainerWidth}
 						title='Ширина контента'
 					/>
 					<div className={clsx(styles.bottomContainer)}>
@@ -94,7 +94,7 @@ export const ArticleParamsForm = ({
 							title='Сбросить'
 							type='clear'
 							htmlType='reset'
-							onClick={resetButton}
+							onClick={onReset}
 						/>
 						<Button title='Применить' type='apply' htmlType='submit' />
 					</div>

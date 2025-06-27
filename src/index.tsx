@@ -64,13 +64,13 @@ const App = () => {
 				} as CSSProperties
 			}>
 			<ArticleParamsForm
-				fontFamily={changeFontFamily}
-				fontSize={changeFontSize}
-				fontColor={changeFontColor}
-				backgroundColor={changeBackgroundColor}
-				contentWidth={changeContainerWidth}
-				resetButton={resetSidebarState}
-				applyButton={applySideBarState}
+				changeFontFamily={changeFontFamily}
+				changeFontSize={changeFontSize}
+				changeFontColor={changeFontColor}
+				changeBackgroundColor={changeBackgroundColor}
+				changeContainerWidth={changeContainerWidth}
+				onReset={resetSidebarState}
+				onSubmit={applySideBarState}
 				sideBarState={sideBarState}
 			/>
 			<Article />
