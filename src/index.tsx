@@ -1,10 +1,10 @@
+import clsx from 'clsx';
 import { createRoot } from 'react-dom/client';
 import { StrictMode, CSSProperties } from 'react';
-import clsx from 'clsx';
 
 import { Article } from './components/article/Article';
-import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
 import { defaultArticleState } from './constants/articleProps';
+import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
 
 import './styles/index.scss';
 import styles from './styles/index.module.scss';
@@ -25,7 +25,16 @@ const App = () => {
 					'--bg-color': defaultArticleState.backgroundColor.value,
 				} as CSSProperties
 			}>
-			<ArticleParamsForm />
+			<ArticleParamsForm
+				fontFamily={() => {}}
+				fontSize={() => {}}
+				fontColor={() => {}}
+				backgroundColor={() => {}}
+				contentWidth={() => {}}
+				resetButton={() => {}}
+				applyButton={() => {}}
+				sideBarState={defaultArticleState}
+			/>
 			<Article />
 		</main>
 	);
