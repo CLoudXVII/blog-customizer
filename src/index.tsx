@@ -1,10 +1,14 @@
 import clsx from 'clsx';
 import { createRoot } from 'react-dom/client';
-import { StrictMode, CSSProperties } from 'react';
+import { StrictMode, CSSProperties, useState, FormEvent } from 'react';
 
 import { Article } from './components/article/Article';
-import { defaultArticleState } from './constants/articleProps';
 import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
+import {
+	ArticleStateType,
+	defaultArticleState,
+	OptionType,
+} from './constants/articleProps';
 
 import './styles/index.scss';
 import styles from './styles/index.module.scss';
@@ -13,27 +17,61 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
+	const [sideBarState, setSideBarState] =
+		useState<ArticleStateType>(defaultArticleState);
+	const [articleState, setArticleState] = useState(defaultArticleState);
+
+	const changeFontFamily = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, fontFamilyOption: select });
+	};
+
+	const changeFontSize = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, fontSizeOption: select });
+	};
+
+	const changeFontColor = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, fontColor: select });
+	};
+
+	const changeBackgroundColor = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, backgroundColor: select });
+	};
+
+	const changeContainerWidth = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, contentWidth: select });
+	};
+
+	const resetSidebarState = () => {
+		setArticleState(defaultArticleState);
+		setSideBarState(defaultArticleState);
+	};
+
+	const applySideBarState = (event: FormEvent) => {
+		event.preventDefault();
+		setArticleState(sideBarState);
+	};
+
 	return (
 		<main
 			className={clsx(styles.main)}
 			style={
 				{
-					'--font-family': defaultArticleState.fontFamilyOption.value,
-					'--font-size': defaultArticleState.fontSizeOption.value,
-					'--font-color': defaultArticleState.fontColor.value,
-					'--container-width': defaultArticleState.contentWidth.value,
-					'--bg-color': defaultArticleState.backgroundColor.value,
+					'--font-family': articleState.fontFamilyOption.value,
+					'--font-size': articleState.fontSizeOption.value,
+					'--font-color': articleState.fontColor.value,
+					'--container-width': articleState.contentWidth.value,
+					'--bg-color': articleState.backgroundColor.value,
 				} as CSSProperties
 			}>
 			<ArticleParamsForm
-				fontFamily={() => {}}
-				fontSize={() => {}}
-				fontColor={() => {}}
-				backgroundColor={() => {}}
-				contentWidth={() => {}}
-				resetButton={() => {}}
-				applyButton={() => {}}
-				sideBarState={defaultArticleState}
+				fontFamily={changeFontFamily}
+				fontSize={changeFontSize}
+				fontColor={changeFontColor}
+				backgroundColor={changeBackgroundColor}
+				contentWidth={changeContainerWidth}
+				resetButton={resetSidebarState}
+				applyButton={applySideBarState}
+				sideBarState={sideBarState}
 			/>
 			<Article />
 		</main>
