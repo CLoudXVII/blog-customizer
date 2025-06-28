@@ -14,46 +14,80 @@ import {
 	ArticleStateType,
 	backgroundColors,
 	contentWidthArr,
+	defaultArticleState,
 	fontColors,
 	fontFamilyOptions,
 	fontSizeOptions,
 	OptionType,
 } from 'src/constants/articleProps';
 
+import { useClose } from './hooks/useClose';
+
 interface ArticleParamsFormProps {
-	changeFontFamily: (select: OptionType) => void;
-	changeFontSize: (select: OptionType) => void;
-	changeFontColor: (select: OptionType) => void;
-	changeBackgroundColor: (select: OptionType) => void;
-	changeContainerWidth: (select: OptionType) => void;
-	onReset: () => void;
-	onSubmit: (event: FormEvent) => void;
-	sideBarState: ArticleStateType;
+	setArticleState: React.Dispatch<React.SetStateAction<ArticleStateType>>;
 }
 
 export const ArticleParamsForm = ({
-	changeFontFamily,
-	changeFontSize,
-	changeFontColor,
-	changeBackgroundColor,
-	changeContainerWidth,
-	onReset,
-	onSubmit,
-	sideBarState,
+	setArticleState,
 }: ArticleParamsFormProps) => {
-	const ref = useRef<HTMLFormElement | null>(null);
-	const [open, setOpen] = useState(false);
+	const [isFormOpen, setFormOpen] = useState(false);
+	const [sideBarState, setSideBarState] =
+		useState<ArticleStateType>(defaultArticleState);
+
+	const formRef = useRef<HTMLFormElement | null>(null);
+
+	useClose({
+		isOpen: isFormOpen,
+		onClose: () => setFormOpen(false),
+		containerRef: formRef,
+	});
 
 	const toggleForm = useCallback(() => {
-		setOpen((prevOpen) => !prevOpen);
+		setFormOpen((prevOpen) => !prevOpen);
 	}, []);
+
+	const changeFontFamily = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, fontFamilyOption: select });
+	};
+
+	const changeFontSize = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, fontSizeOption: select });
+	};
+
+	const changeFontColor = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, fontColor: select });
+	};
+
+	const changeBackgroundColor = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, backgroundColor: select });
+	};
+
+	const changeContainerWidth = (select: OptionType) => {
+		setSideBarState({ ...sideBarState, contentWidth: select });
+	};
+
+	const onReset = () => {
+		setArticleState(defaultArticleState);
+		setSideBarState(defaultArticleState);
+	};
+
+	const onSubmit = (event: FormEvent) => {
+		event.preventDefault();
+		setArticleState(sideBarState);
+	};
 
 	return (
 		<>
-			<ArrowButton isOpen={open} onClick={toggleForm} />
+			<ArrowButton isOpen={isFormOpen} onClick={toggleForm} />
 			<aside
-				className={clsx(styles.container, { [styles.container_open]: open })}>
-				<form className={styles.form} ref={ref} onSubmit={onSubmit}>
+				className={clsx(styles.container, {
+					[styles.container_open]: isFormOpen,
+				})}>
+				<form
+					className={styles.form}
+					ref={formRef}
+					onSubmit={onSubmit}
+					onReset={onReset}>
 					<Text as={'h3'} size={31} weight={800} uppercase>
 						Задайте параметры
 					</Text>
@@ -90,12 +124,7 @@ export const ArticleParamsForm = ({
 						title='Ширина контента'
 					/>
 					<div className={clsx(styles.bottomContainer)}>
-						<Button
-							title='Сбросить'
-							type='clear'
-							htmlType='reset'
-							onClick={onReset}
-						/>
+						<Button title='Сбросить' type='clear' htmlType='reset' />
 						<Button title='Применить' type='apply' htmlType='submit' />
 					</div>
 				</form>
